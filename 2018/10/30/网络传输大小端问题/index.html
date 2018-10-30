@@ -8,7 +8,7 @@
 <li>大端法(Big-Endian)就是高位字节排放在内存的低地址端(即该值的起始地址),低位字节排放在内存的高地址端</li>
 <li>就比如 0x12345678 这个十六进制数字，低位在最右边(理解一下十进制中12345678，从右往左是不是个十百千…)，小端存储法就是0x78在低地址，0x12在高地址;大端0x78在高地址，0x12在低地址，可以用下面这一段代码看看自己是不是小端字节序.</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="keyword">int</span> val = <span class="number">0x12345678</span>;</span><br><span class="line"><span class="keyword">char</span> *pVal = (<span class="keyword">char</span>*)&amp;val;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%x %x %x %x\n"</span>,*(pVal+<span class="number">0</span>),*(pVal+<span class="number">1</span>),*(pVal+<span class="number">2</span>),*(pVal+<span class="number">3</span>));</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> val = <span class="number">0x12345678</span>;</span><br><span class="line">	<span class="keyword">char</span> *pVal = (<span class="keyword">char</span>*)&amp;val;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%x %x %x %x\n"</span>,*(pVal+<span class="number">0</span>),*(pVal+<span class="number">1</span>),*(pVal+<span class="number">2</span>),*(pVal+<span class="number">3</span>));</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>输出结果是:78 56 34 12,证明了我使用的这台计算机是小端字节序</li>
 </ul>
@@ -18,7 +18,7 @@
 </ul>
 <p><strong>有了以上基础知识,那么便可以说明第一个问题了</strong></p>
 <ul>
-<li>网络上传输数据是按内存地址从低到高按顺序传输,那么传输”Hello”这个字符串的时候，就是按照’H’ ‘e’ ‘l’ ‘l’ ‘o’的顺序依次传输，对方接收的话，也是按照这个顺序把数据存入缓存区,字符串不涉及到大小端存储的规则，所以无需调用字节序转换函数来处理。</li>
+<li>网络上传输数据是按内存地址从低到高按顺序传输,那么传输”Hello”这个字符串的时候，就是按照”H” “e” “l” “l” “o”的顺序依次传输，对方接收的话，也是按照这个顺序把数据存入缓存区,字符串不涉及到大小端存储的规则，所以无需调用字节序转换函数来处理。</li>
 <li>如果是 0x12345678 这个数据，那么则是按照0x78 0x56 0x34 0x12这个顺序按字节发送(16进制2位则是一个字节),对方机器如果收到后用int类型来解释这个数据，如果对方机器是小端字节序，那么没问题，收到的数据还是0x12345678，但是如果对方机器是大端字节序,用int来解释则会把高地址数据放在低位 低地址放在高位，变成了0x78563412,就会发生不想要的结果。</li>
 </ul>
 <p><strong>结论</strong></p>
