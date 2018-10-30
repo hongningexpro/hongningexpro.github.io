@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>hongning</title>
+  <title>个人小站</title>
   
   <subtitle>世间所有相遇,都是久别重逢</subtitle>
   <link href="/atom.xml" rel="self"/>
@@ -10,7 +10,7 @@
   <id>http://yoursite.com/</id>
   
   <author>
-    <name>hongning</name>
+    <name>洪宁</name>
     
   </author>
   
