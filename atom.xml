@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-11-01T15:12:59.804Z</updated>
+  <updated>2018-11-01T16:20:05.593Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>数据库基础-数据类型和约束</title>
+    <link href="http://yoursite.com/2018/11/01/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%BA%A6%E6%9D%9F/"/>
+    <id>http://yoursite.com/2018/11/01/数据库基础-数据类型和约束/</id>
+    <published>2018-11-01T15:20:37.000Z</published>
+    <updated>2018-11-01T16:20:05.593Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><p><strong>常见数据类型</strong></p><ul><li>整数:int,bit</li><li>小数:decimal</li><li>字符串:varchar,char</li><li>日期时间:date,time,datetime</li><li>枚举类型:enum<br><strong>特殊类型说明</strong></li><li>decimal表示浮点数,如decimal(3,2)表示共存3位数,小数占2位</li><li>char表示固定长度的字符串,如char(3),如果填充’ab’时会补一个空格为’ab ‘</li><li>varchar表示变长的字符串,如varchar(3)，如果填充’ab’，实际就是’ab’</li><li>text类型存储大文本字符串,当字符大于4000时推荐使用</li><li>更全的数据类型可以参考[这里][<a href="http://blog.csdn.net/anxpp/article/details/51284106]" target="_blank" rel="noopener">http://blog.csdn.net/anxpp/article/details/51284106]</a><h1 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h1></li><li>主键primary key:物理上存储的顺序</li><li>非空not null:此字段不允许填写空置</li><li>唯一unique:此字段的值不允许重复</li><li>默认default:当不填写此值时会使用默认值，如果填写时以填写为准</li><li>外键foreign key:对关系字段进行约束,当为关系字段填写值时,会到关联的表中查询此值是否存在,如果存在则填写成功,如果不存在则填写失败并抛出异常</li><li>说明:虽然外键约束可以保证数据的有效性,但是在进行数据的crud(增加，修改，删除，查询)时，都会降低数据库的性能,所以不推荐使用,那么数据的有效性怎么保证呢？答:可以在逻辑层进行控制<h1 id="数值类型归类-常用"><a href="#数值类型归类-常用" class="headerlink" title="数值类型归类(常用)"></a>数值类型归类(常用)</h1>类型|字节大小|有符号范围(signed)|无符号范围(unsigned)<br>:-:|:-|:-|:-<br>TINYINT|1|-128~127|0~255<br>SMALLINT|2|-32768~32767|0~65535<br>MEDIUMINT|3|-8388608~8388607|0~16777215<br>INT/INTEGER|4|-2147483648~2147483647|0~4294967295<br>BITINT|8|-9223372036854775808~9223372036854775807|0~18446744073709551615<h1 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h1>类型|字节大小|示例<br>:-:|:-|:-<br>CHAR|0~255|类型:char(3)输入’ab’,实际存储为’ab ‘,输入’abcd’ 实际存储为 ‘abc’<br>VARCHAR|0~255|类型:varchar(3) 输 ‘ab’,实际存储为’ab’, 输入’abcd’,实际存储为’abc’<br>TEXT|0~65535|大文本<h1 id="日期时间类型"><a href="#日期时间类型" class="headerlink" title="日期时间类型"></a>日期时间类型</h1>类型|字节大小|示例<br>:-:|:-|:-<br>DATE|4|’2018-11-01’<br>TIME|3|’0:08:00’<br>DATETIME|8|’2018-11-01 0:08:00’<br>YEAR|1|’2017’<br>TIMESTAMP|4|’1920-01-01 00:00:01’UTC~’2038-01-01 00:00:01’UTC</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;数据类型&quot;&gt;&lt;a href=&quot;#数据类型&quot; class=&quot;headerlink&quot; title=&quot;数据类型&quot;&gt;&lt;/a&gt;数据类型&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;常见数据类型&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;整数:int,bit&lt;/li&gt;
+&lt;li&gt;小数:de
+      
+    
+    </summary>
+    
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+  </entry>
   
   <entry>
     <title>网络传输大小端问题</title>
