@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-11-08T16:39:17.834Z</updated>
+  <updated>2018-11-12T14:14:04.723Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MySQL学习之链接查询</title>
+    <link href="http://yoursite.com/2018/11/12/MySQL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%93%BE%E6%8E%A5%E6%9F%A5%E8%AF%A2/"/>
+    <id>http://yoursite.com/2018/11/12/MySQL学习之链接查询/</id>
+    <published>2018-11-12T13:36:48.000Z</published>
+    <updated>2018-11-12T14:14:04.723Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="交叉链接"><a href="#交叉链接" class="headerlink" title="交叉链接"></a>交叉链接</h1><ul><li>交叉链接的结果可以称之为笛卡尔积,把左表中的数据每一行都与右表中所有行相结合,形成的新表的行数是 左表数据行数*右表数据行数,示例如下</li><li>左表</li></ul><table><thead><tr><th style="text-align:center">id</th><th style="text-align:left">姓名</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:left">小王</td></tr><tr><td style="text-align:center">2</td><td style="text-align:left">小李</td></tr></tbody></table><ul><li>右表</li></ul><table><thead><tr><th style="text-align:center">id</th><th style="text-align:left">班级</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:left">一班</td></tr><tr><td style="text-align:center">2</td><td style="text-align:left">二班</td></tr></tbody></table><ul><li>交叉链接查询结果</li></ul><table><thead><tr><th style="text-align:center">id</th><th style="text-align:left">姓名</th><th style="text-align:left">id</th><th style="text-align:left">班级</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:left">小王</td><td style="text-align:left">1</td><td style="text-align:left">一班</td></tr><tr><td style="text-align:center">1</td><td style="text-align:left">小王</td><td style="text-align:left">2</td><td style="text-align:left">二班</td></tr><tr><td style="text-align:center">2</td><td style="text-align:left">小李</td><td style="text-align:left">1</td><td style="text-align:left">一班</td></tr><tr><td style="text-align:center">2</td><td style="text-align:left">小李</td><td style="text-align:left">2</td><td style="text-align:left">二班</td></tr></tbody></table><ul><li>交叉链接SQL语句<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> students <span class="keyword">cross</span> <span class="keyword">join</span> classes;</span><br></pre></td></tr></table></figure></li></ul><h1 id="内链接"><a href="#内链接" class="headerlink" title="内链接"></a>内链接</h1><ul><li>仅将两个表中满足连接条件的行组合起来作为结果集。在内连接中，只有在两个表中匹配的行才能在结果集中出现<br><strong>等值链接</strong></li><li>在连接条件中使用等于号(=)运算符比较被连接列的列值，其查询结果中列出被连接表中的所有列，包括其中的重复列<br><strong>不等值链接</strong></li><li>在连接条件使用除等于运算符以外的其它比较运算符比较被连接的列的列值。这些运算符包括&gt;、&gt;=、&lt;=、&lt;、!&gt;、!&lt;和&lt;&gt;<br><strong>自然链接</strong></li><li>在连接条件中使用等于(=)运算符比较被连接列的列值，但它使用选择列表指出查询结果集合中所包括的列，并删除连接表中的重复列<br><strong>SQL语句</strong><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> 列名 <span class="keyword">from</span>  左表 <span class="keyword">inner</span> <span class="keyword">join</span> 右表 <span class="keyword">on</span> 左表.xxx = 右表.xxx;</span><br></pre></td></tr></table></figure></li></ul><h1 id="外链接"><a href="#外链接" class="headerlink" title="外链接"></a>外链接</h1><ul><li>外联接可以是左向外联接、右向外联接或完整外部联接。在内连接的基础上，还包含表中所有不符合条件的数据行，并将相对应的表列填写NULL<br><strong>左外链接</strong></li><li>（左–对应右NULL）<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> 列名 <span class="keyword">from</span> 左表 <span class="keyword">left</span> <span class="keyword">join</span> 右表 <span class="keyword">on</span> 左表.xxx = 右表.xxx;</span><br></pre></td></tr></table></figure></li></ul><p><strong>右外链接</strong></p><ul><li>（右–对应左NULL）<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> 列名 <span class="keyword">from</span> 左表 <span class="keyword">right</span> <span class="keyword">join</span> 右表 <span class="keyword">on</span> 左表.xxx = 右表.xxx;</span><br></pre></td></tr></table></figure></li></ul><p><strong>全外链接</strong></p><ul><li>完整外部联接返回左表和右表中的所有行。当某行在另一个表中没有匹配行时，则另一个表的选择列表列包含空值。如果表之间有匹配行，则整个结果集行包含基表的数据值。<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> 列名 <span class="keyword">from</span> 左表 <span class="keyword">full</span> <span class="keyword">join</span> 右表 <span class="keyword">on</span> 左表.xxx = 右表.xxx;</span><br></pre></td></tr></table></figure></li></ul><p>不过这条全外链接语句我用MySQL测试的时候报错了,还有待验证…</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;交叉链接&quot;&gt;&lt;a href=&quot;#交叉链接&quot; class=&quot;headerlink&quot; title=&quot;交叉链接&quot;&gt;&lt;/a&gt;交叉链接&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;交叉链接的结果可以称之为笛卡尔积,把左表中的数据每一行都与右表中所有行相结合,形成的新表的行数是 左表数据行数*
+      
+    
+    </summary>
+    
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+  </entry>
   
   <entry>
     <title>Unix编程之getopt getopt_long的使用</title>
