@@ -345,4 +345,28 @@
     
   </entry>
   
+  <entry>
+    <title>Makefile基础</title>
+    <link href="http://yoursite.com/2018/02/11/Makefile%E5%9F%BA%E7%A1%80/"/>
+    <id>http://yoursite.com/2018/02/11/Makefile基础/</id>
+    <published>2018-02-11T15:11:25.000Z</published>
+    <updated>2019-02-11T15:00:03.048Z</updated>
+    
+    <content type="html"><![CDATA[<p>此文记录了我对makefile学习的一点点笔记,这一篇是基础部分。作为一个linux下的c语言程序员,makefile这种基础技能是我不可缺少的能力。</p><h1 id="Makefile基础知识"><a href="#Makefile基础知识" class="headerlink" title="Makefile基础知识"></a>Makefile基础知识</h1><h2 id="Makefile介绍"><a href="#Makefile介绍" class="headerlink" title="Makefile介绍"></a>Makefile介绍</h2><p>make命令执行时，首先会在当前目录下寻找命名为”Makefile” 或者是 “makefile”的文件(其实还有其他名字，但是我记不住，无所谓的，常见的开发过程中最常见的这两种名字也完全够用了)。如果在当前目录下找到了此文件,则会按照一定规则执行文件中的内容(命令)。</p><h2 id="常见的Makefile书写规则"><a href="#常见的Makefile书写规则" class="headerlink" title="常见的Makefile书写规则"></a>常见的Makefile书写规则</h2><p>形式如下(下述例子中的名字仅以英文意思命名，容易理解，并不代表真正Makefile书写中一定要按照如此名字):<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">target:prerequisites </span></span><br><span class="line">command</span><br></pre></td></tr></table></figure></p><ul><li>target:目标文件，makefile最常见的功能就是编译出可执行程序，target意思为目标，代表了下面的命令要生成的文件名。其实这只是常见的人们的习惯，如果要从Makefile运行原理上来说，完全不必拘泥于这些不成文的规则。target也可以是一个标签，常见的用法有clean标签，用来清理make所产生的文件。</li><li>prerequisites:依赖，也就是生成target所要依赖的文件</li><li>command：见名知意，命令的意思<h2 id="Makefile工作原理"><a href="#Makefile工作原理" class="headerlink" title="Makefile工作原理"></a>Makefile工作原理</h2>1.make命令会在当前目录下寻找名字为”Makefile”或”makefile”的文件<br>2.如果找到，它会找文件中第一个目标文件(target)<br>3.如果目标文件冒号后边存在依赖文件,它会找目标冒号后边的依赖文件(prerequisites),依赖文件可以是一个或者多个。如果目标文件不存在或者是依赖文件的修改时间要比目标文件新,会执行下边的命令。如果依赖文件的依赖性也存在，则会进入下边去寻找依赖文件的依赖文件,以确保生成最新的依赖文件,makefile的执行就像是一个递归的过程.</li><li>以上解释也是仅凭我个人理解所记录，不大好理解。。。。。抱歉！<h2 id="Makefile中使用变量"><a href="#Makefile中使用变量" class="headerlink" title="Makefile中使用变量"></a>Makefile中使用变量</h2>我们为了简化Makefile的书写，在编译大型项目的情况下，通常会有很多个小文件，为了方便我们添加编译文件而无需改动太大，我们可以使用变量，有点类似c语言中的宏定义。<br>使用变量则需要使用$(变量名)这种格式<br>例子如下:<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">OBJ=main.o test1.o test2.o</span><br><span class="line"><span class="section">target:<span class="variable">$(OBJ)</span></span></span><br><span class="line">gcc -o target <span class="variable">$(OBJ)</span></span><br></pre></td></tr></table></figure></li></ul><h2 id="Makefile小知识点"><a href="#Makefile小知识点" class="headerlink" title="Makefile小知识点"></a>Makefile小知识点</h2><p>由于我所学习Makefile的文章也是来源于一篇笔记，写的很长，我一下子也没能看完，知识点的梳理不算很好，自己无法很好地整理成很好地知识体系，暂且把一些细小知识点记录下来。</p><ul><li>没有依赖文件的目标文件:其实这个在我们平常书写的makefile中非常常见，见得最多的就是make clean这个命令了，通常书写makefile都会写一个clean目标，用来清空自己编译留下的文件。是不是很奇怪clean这个目标文件之后没有任何的依赖文件<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">clean:</span></span><br><span class="line">rm -rf *.o target</span><br></pre></td></tr></table></figure></li></ul><p>还记得上文说的makefile工作原理吗?make命令会寻找makefile文件中的第一个目标文件，如果我们把上边例子中的内容放在makefile文件最前面，那么它会无条件的执行下面的删除命令(除非当前目录存在一个名字叫做clean的文件),没有依赖文件也就不会去对比目标文件和依赖文件的修改时间。所以通常上边例子中的内容通常会放在makefile文件最下边，通过make clean指定来执行。当然如果存在了clean文件，我们也有办法执行下边的命令，这就得用到伪目标、</p><ul><li><p>.POHOY：通过.PHONY声明的目标，即使当前目录下存在目标文件，也会去执行下边的命令</p><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">.POHNY:clean</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">rm -rf *.o target</span><br></pre></td></tr></table></figure></li><li><p>指定执行某个makefile文件:这得用到make命令的-f参数,make -f 文件名,这样子也就可以指定执行当前目录下某个makefile文件</p></li><li>include:这个有点类似c语言的包含头文件，在一个主makefile文件中包含其他子makefile文件，如果包含的文件不在当前目录下，使用make命令时可以使用-I参数来指定目录，和gcc编译的-i参数一模一样。</li><li>显示命令:通常书写的makefile文件运行时，都会在终端上打印所执行的命令，如果想要不打印，我们可以再命令前加上@符号</li><li>命令出错:每个命令运行完毕，make会检测每个命令的返回值，如果成功继续往下运行，否则终止当前运行并退出，如果想要忽略错误，可以在命令前加上 - 符号</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;此文记录了我对makefile学习的一点点笔记,这一篇是基础部分。作为一个linux下的c语言程序员,makefile这种基础技能是我不可缺少的能力。&lt;/p&gt;
+&lt;h1 id=&quot;Makefile基础知识&quot;&gt;&lt;a href=&quot;#Makefile基础知识&quot; class=&quot;head
+      
+    
+    </summary>
+    
+    
+      <category term="Linux系统编程" scheme="http://yoursite.com/tags/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/"/>
+    
+  </entry>
+  
 </feed>
