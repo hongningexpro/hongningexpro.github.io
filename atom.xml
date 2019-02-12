@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-02-12T12:21:16.929Z</updated>
+  <updated>2019-02-12T16:10:52.216Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Makefile之变量</title>
+    <link href="http://yoursite.com/2019/02/12/Makefile%E4%B9%8B%E5%8F%98%E9%87%8F/"/>
+    <id>http://yoursite.com/2019/02/12/Makefile之变量/</id>
+    <published>2019-02-12T15:11:23.000Z</published>
+    <updated>2019-02-12T16:10:52.216Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Makefile变量使用"><a href="#Makefile变量使用" class="headerlink" title="Makefile变量使用"></a>Makefile变量使用</h1><h2 id="Makefile变量赋值符"><a href="#Makefile变量赋值符" class="headerlink" title="Makefile变量赋值符"></a>Makefile变量赋值符</h2><p>Makefile变量赋值符类似于编程语言中对变量进行赋值的符号,常见的有 = 号,makefile中我目前所知道的有四种赋值符号,分别如下:</p><ul><li>=:这是最普通的赋值符号，赋值完成后使用变量会变成替换=之后的内容</li><li>:= :这种方式定义的变量，前面定义的变量不可以使用后边定义的变量，其实可以防止递归定义变量带来的缺陷，下文会有解释。</li><li>?= :这种方式定义的变量，如果前面已经定义过，那么此条定义语句就没有任何作用，也就是只有首次定义才会有效</li><li>+= :追加定义变量<br>接下来详细解释下每种定义变量的区别<br>1.最普通的= 定义变量，可以在任何位置定义变量，也就是说不一定要先定义,下面请看一个例子<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foo=<span class="variable">$(bar)</span></span><br><span class="line">bar=<span class="variable">$(ugh)</span></span><br><span class="line">ugh=Huh?</span><br></pre></td></tr></table></figure></li></ul><p>那么最后foo的值就是Huh? ，这也就是=定义变量之前先引用之后定义的变量。<br>缺点:这种方式定义变量有明显的缺陷，就是递归定义，请看如下例子：<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CFLAGS=<span class="variable">$(CFLAGS)</span> -O</span><br></pre></td></tr></table></figure></p><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A=<span class="variable">$(B)</span></span><br><span class="line">B=<span class="variable">$(A)</span></span><br></pre></td></tr></table></figure><p>这样子就会使得make陷入无限的变量展开过程中去，当然make具备检测这种情况的能力，会报错，为了避免上述情况发生，我们就可以使用”:=”符号定义变量<br>2.上面对”:=”已经有了初步介绍，下边请看详细的例子解释:<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x :=foo</span><br><span class="line">y :=<span class="variable">$(x)</span> bar</span><br><span class="line">x := later</span><br></pre></td></tr></table></figure></p><p>最后的结果就是 y的值是”foo bar” ，x是”later”<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">y :=<span class="variable">$(x)</span> bar</span><br><span class="line">x :=later</span><br></pre></td></tr></table></figure></p><p>最后的结果就是 y的值是”bar” ，x是”later”<br>3.接下来说一下追加定义变量符号 “+=”<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">obj=a.o b.o</span><br><span class="line">obj+=c.o</span><br></pre></td></tr></table></figure></p><p>最终obj结果就是”a.o b.o c.o”，其等价于<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">obj=a.o b.o</span><br><span class="line">obj :=<span class="variable">$(obj)</span> c.o</span><br></pre></td></tr></table></figure></p><p>如果变量之前没有定义过，那么，“+=”会自动变成“=”，如果前面有变量定义，那么“+=”会继承于前次操作的赋值符。如果前一次的是“:=”，那么“+=”会以“:=”作为其赋值符，如：<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">variable := value</span><br><span class="line">variable += more</span><br></pre></td></tr></table></figure></p><p>等价于<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">variable := value</span><br><span class="line">variable := <span class="variable">$(variable)</span> more</span><br></pre></td></tr></table></figure></p><p>但如果是这种情况:<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">variable = value</span><br><span class="line">variable += more</span><br></pre></td></tr></table></figure></p><p>由于前次的赋值符是“=”，所以“+=”也会以“=”来做为赋值，那么岂不会发生变量的递补归定义，这是很不好的，所以make会自动为我们解决这个问题，我们不必担心这个问题。</p><h2 id="变量的高级用法"><a href="#变量的高级用法" class="headerlink" title="变量的高级用法"></a>变量的高级用法</h2><p><strong>变量值的替换</strong><br>我们可以替换变量中的共有的部分，其格式是“$(var:a=b)”或是“${var:a=b}”，其意思是，把变量“var”中所有以“a”字串“结尾”的“a”替换成“b”字串。这里的“结尾”意思是“空格”或是“结束符”。<br>例子:<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">foo := a.o b.o c.o</span><br><span class="line">bar := $(foo:.o=.c)</span><br></pre></td></tr></table></figure></p><p>这个示例中，我们先定义了一个“$(foo)”变量，而第二行的意思是把“$(foo)”中所有以“.o”字串“结尾”全部替换成“.c”，所以我们的“$(bar)”的值就是“a.c b.c c.c”。<br><strong>把变量的值再当成变量</strong><br>请看如下例子:<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x=y</span><br><span class="line">y=Hello</span><br><span class="line"></span><br><span class="line">var=$(<span class="variable">$(x)</span>)</span><br></pre></td></tr></table></figure></p><p>这样子其实就是个嵌套取变量内容，最终var=Hello,这一点有点类似于C语言中的取地址符号&amp;,当然这也可以使用更多层次</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Makefile变量使用&quot;&gt;&lt;a href=&quot;#Makefile变量使用&quot; class=&quot;headerlink&quot; title=&quot;Makefile变量使用&quot;&gt;&lt;/a&gt;Makefile变量使用&lt;/h1&gt;&lt;h2 id=&quot;Makefile变量赋值符&quot;&gt;&lt;a href=&quot;#
+      
+    
+    </summary>
+    
+    
+      <category term="Linux系统编程" scheme="http://yoursite.com/tags/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/"/>
+    
+  </entry>
   
   <entry>
     <title>Makefile基础</title>
