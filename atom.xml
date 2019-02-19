@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-02-18T16:36:41.885Z</updated>
+  <updated>2019-02-19T13:04:14.620Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Nginx学习之旅之Nginx编译安装</title>
+    <link href="http://yoursite.com/2019/02/19/Nginx%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85%E4%B9%8BNginx%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"/>
+    <id>http://yoursite.com/2019/02/19/Nginx学习之旅之Nginx编译安装/</id>
+    <published>2019-02-19T12:43:40.000Z</published>
+    <updated>2019-02-19T13:04:14.620Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Nginx源码编译安装"><a href="#Nginx源码编译安装" class="headerlink" title="Nginx源码编译安装"></a>Nginx源码编译安装</h1><ul><li>首先第一步当然是上官网下载Nginx源码,登录<a href="http://nginx.org" target="_blank" rel="noopener">nginx.org</a>,然后点击右下角的download,进入界面后，选择稳定版本(Stable version),选中稳定版本的nginx链接，复制。然后在linux系统上使用wget+链接命令,下载源码。<br>下载完成后，进入下载完成的目录，大致介绍下里边的内容,CHANGES文件里边记录了Nginx版本更新以及所修复的bug等记录，CHANGES.ru文件是俄罗斯语版本的CHANGES文件(因为Nginx是俄罗斯人开发的);contrib目录下vim目录下有有关vim配置有用的文件，可以高亮显示Nginx配置文件的语法关键字等作用,只需要把vim目录下的内容复制到~/.vim/目录下即可生效；configure文件是安装前进行配置的脚本文件，可以指定特定安装目录,指定需要安装的模块等作用。configure的help参数可以列出脚本所支持的参数,–with代表了安装时不会默认安装的模块,可以通过with参数指定某些模块需要编译进去,–without代表了安装时会默认安装的模块，可以通过without参数指定某些模块不需要编译，–prefix参数指定Nginx安装路径；man目录下有对应的nginx使用手册，可以使用man命令+文件名打开</li><li>对目录有大致介绍，接下来使用configure脚本进行配置,直接运行即可,它会检查安装Nginx所需要依赖的库文件，如果缺少则需要手动百度安装响应的库</li><li>执行完configure脚本后，会在当前目录下生成一个objs目录,cd进入,可以看到里边有一些c语言源文件，和src目录，其中ngx_modules.c指定了编译Nginx时会编译进去的模块</li><li>接下来会到我们初始目录，使用make命令，编译,编译完成后，make install命令,Nginx在自己电脑上就安装完成了!</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Nginx源码编译安装&quot;&gt;&lt;a href=&quot;#Nginx源码编译安装&quot; class=&quot;headerlink&quot; title=&quot;Nginx源码编译安装&quot;&gt;&lt;/a&gt;Nginx源码编译安装&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;首先第一步当然是上官网下载Nginx源码,登录&lt;a hr
+      
+    
+    </summary>
+    
+    
+      <category term="Nginx" scheme="http://yoursite.com/tags/Nginx/"/>
+    
+  </entry>
   
   <entry>
     <title>Makefile之函数使用</title>
