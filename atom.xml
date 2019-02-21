@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-02-19T14:19:33.117Z</updated>
+  <updated>2019-02-21T15:59:19.313Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Makefile之Makefile运行</title>
+    <link href="http://yoursite.com/2019/02/21/Makefile%E4%B9%8BMakefile%E8%BF%90%E8%A1%8C/"/>
+    <id>http://yoursite.com/2019/02/21/Makefile之Makefile运行/</id>
+    <published>2019-02-21T15:14:56.000Z</published>
+    <updated>2019-02-21T15:59:19.313Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Makefile运行"><a href="#Makefile运行" class="headerlink" title="Makefile运行"></a>Makefile运行</h1><p>Makefile运行最简单的方法就是输入make命令后执行，这样子make命令会去找寻Makefile文件中第一个目标，然后寻找此目标的依赖文件，找寻依赖文件的依赖文件，然后递归去寻找依赖文件的依赖文件的依赖文件，比对其更新时间，如果对应目标所依赖文件更新时间在目标文件之前，就会执行对应目标之下的命令，以编译出最新的目标文件，这是一个递归的过程，所需细节需要自己慢慢去体会，这里反正我已经理解了，就不做过多解释。嘿嘿！<br>当然有时候make命令不一定要编译文件中第一个目标，可以依据参数来指定某个目标，或者传入对应参数，执行make的不同功能，此章节就是要讲述Makefile运行的细节。</p><h2 id="make的退出码"><a href="#make的退出码" class="headerlink" title="make的退出码"></a>make的退出码</h2><p>make命令执行后有三个退出码：</p><ul><li>0：执行成功</li><li>1：如果make命令运行出现错误，返回1</li><li>2：如果make命令带有-q选项，使得一些目标不需要更新，返回2(后边会详细介绍)</li></ul><h2 id="指定Makefile"><a href="#指定Makefile" class="headerlink" title="指定Makefile"></a>指定Makefile</h2><p>GNU make命令会依次寻找当前目录下边的“GNUmakefile”  “makefile”  “Makefile”文件，一旦找到，就开始读取这个文件并执行。<br>当然，我们也可以给make命令指定一个特殊名字的文件，让其去执行，想要达到这个目的，就需要用到make的-f参数或者是-=file命令，后边加上文件名，让其去读取运行。<br>如果make命令不只一次使用了-f参数，那么所指定的makefile会被连在一起传递给make命令去执行。</p><h2 id="指定目标"><a href="#指定目标" class="headerlink" title="指定目标"></a>指定目标</h2><p>一般来说，make命令执行的目标就是指定文件中的第一个目标，其他目标都是由第一个目标的依赖文件推导出来的，当然我们也可以给make命令执行目标，只需要在make命令后加上指定目标即可。理论上任何目标都可以被指定成最终目标，除非是“-”打头或者是包含了“=”的目标，前者会被认为是命令行参数，后者会被认为是变量。甚至在make命令执行文件中没有被我们明显指定的目标，也可以成为最终目标，此时就依赖于make命令的隐含规则推导规则，隐含目标同样可以被指定成终极目标。<br>make有一个环境变量叫”MAKECMDGOALS”,这个变量中存放了所指定的终极目标，如果使用make命令时没有指定任何目标，那么这个变量会是空值。<br>示例:<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">target:</span></span><br><span class="line">    @echo MAKECMDGOALS=<span class="variable">$(MAKECMDGOALS)</span></span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>:app</span></span><br><span class="line"><span class="section">app:</span></span><br><span class="line">    @echo MAKECMDGOALS=<span class="variable">$(MAKECMDGOALS)</span></span><br></pre></td></tr></table></figure></p><p>使用最普通的make命令不带任何参数，会执行第一个目标target下边的命令，结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MAKECMDGOALS=</span><br></pre></td></tr></table></figure></p><p>如果我们指定make命令执行指定目标，使用make  app命令，结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MAKECMDGOALS=app</span><br></pre></td></tr></table></figure></p><p>通常我们书写makefile有些通用的GNU目标规范，使用通用目标规范不仅可以使我们的makefile便于理解，还可以使我们的makefile更加专业，更加规范，下边列出一些GNUmakefile编写的通用目标规范</p><ul><li>all:这个伪目标是所有目标的目标，其功能一般是编译所有的目标。</li><li>clean:这个伪目标功能是删除所有被make创建的文件。</li><li>install：这个伪目标功能是安装已编译好的程序，其实就是把目标执行文件拷贝到指定的目标中去。</li><li>print：这个伪目标的功能是例出改变过的源文件。</li><li>tar：这个伪目标功能是把源程序打包备份。也就是一个tar文件。</li><li>dist：这个伪目标功能是创建一个压缩文件，一般是把tar文件压成Z文件。或是gz文件。</li><li>TAGS：这个伪目标功能是更新所有的目标，以备完整地重编译使用。</li><li>check和test：这两个伪目标一般用来测试makefile的流程。</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Makefile运行&quot;&gt;&lt;a href=&quot;#Makefile运行&quot; class=&quot;headerlink&quot; title=&quot;Makefile运行&quot;&gt;&lt;/a&gt;Makefile运行&lt;/h1&gt;&lt;p&gt;Makefile运行最简单的方法就是输入make命令后执行，这样子make命
+      
+    
+    </summary>
+    
+    
+      <category term="Linux系统编程 Makefile" scheme="http://yoursite.com/tags/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B-Makefile/"/>
+    
+  </entry>
   
   <entry>
     <title>Nginx学习之旅之配置文件介绍</title>
@@ -460,30 +483,6 @@
     
     
       <category term="网络" scheme="http://yoursite.com/tags/%E7%BD%91%E7%BB%9C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JDSpider使用文档</title>
-    <link href="http://yoursite.com/2018/10/30/JDSpiderReadme/"/>
-    <id>http://yoursite.com/2018/10/30/JDSpiderReadme/</id>
-    <published>2018-10-29T16:03:25.000Z</published>
-    <updated>2018-11-01T16:35:27.494Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="JDSpider介绍"><a href="#JDSpider介绍" class="headerlink" title="JDSpider介绍"></a>JDSpider介绍</h1><ul><li>JDSpider是一个Python写的京东抢券程序<a href="https://github.com/hongningexpro/JDSpider" target="_blank" rel="noopener">源码</a></li></ul><h1 id="配置文件使用"><a href="#配置文件使用" class="headerlink" title="配置文件使用"></a>配置文件使用</h1><h2 id="Account-txt文件说明"><a href="#Account-txt文件说明" class="headerlink" title="Account.txt文件说明"></a>Account.txt文件说明</h2><ul><li>这是账号cookies配置文件,必须按照指定格式配置</li><li>格式: 账号名—-这里随意填写—-cookies</li></ul><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">例如:</span><br><span class="line">18959273396----11----abtest=20181028143048053_24; mobilev=html5; sid=84964d12b0e88cf2e3545d93cb8d9925;</span><br></pre></td></tr></table></figure><h2 id="Ticket-json文件说明"><a href="#Ticket-json文件说明" class="headerlink" title="Ticket.json文件说明"></a>Ticket.json文件说明</h2><ul><li>这是优惠券信息文件</li><li>格式如下<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"name"</span>:<span class="string">"东券非自营手机"</span>,</span><br><span class="line">    <span class="attr">"key"</span>:<span class="string">"ac496b99aa3b4fde8562ba3e14646cb2"</span>,</span><br><span class="line">    <span class="attr">"id"</span>:<span class="string">"15196163"</span>,</span><br><span class="line">    "starttime":"2018-10-28 21:16:00.950",  小数点后面为毫秒数</span><br><span class="line">    "submitcnt":"3",提交次数</span><br><span class="line">    "submitinterval":"200"提交间隔</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><h2 id="YDMConfig-json文件说明"><a href="#YDMConfig-json文件说明" class="headerlink" title="YDMConfig.json文件说明"></a>YDMConfig.json文件说明</h2><ul><li>云打码平台配置文件</li><li>格式如下<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "username":"hn_user",    云打码账号名</span><br><span class="line">    "password":"xxxxxx", 账号密码</span><br><span class="line">    "appid":6017, 开发者软件id</span><br><span class="line">    "appkey":"903e515dfee0a2bcabfd4a7f9a5d3daa"开发者软件秘钥</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><h1 id="日志文件"><a href="#日志文件" class="headerlink" title="日志文件"></a>日志文件</h1><ul><li>抢券结束后在Log目录下会生成response_log.txt  和 result_log.txt文件</li><li>response_log.txt 记录了请求京东服务器对方给的回应</li><li>result_log.txt 记录了抢券结果，如果有账号成功领取到才会有记录</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;JDSpider介绍&quot;&gt;&lt;a href=&quot;#JDSpider介绍&quot; class=&quot;headerlink&quot; title=&quot;JDSpider介绍&quot;&gt;&lt;/a&gt;JDSpider介绍&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;JDSpider是一个Python写的京东抢券程序&lt;a href
-      
-    
-    </summary>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
   </entry>
   
