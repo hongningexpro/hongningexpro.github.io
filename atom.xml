@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-02-21T15:59:19.313Z</updated>
+  <updated>2019-02-24T06:31:09.065Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Makefile之make命令参数</title>
+    <link href="http://yoursite.com/2019/02/24/Makefile%E4%B9%8Bmake%E5%91%BD%E4%BB%A4%E5%8F%82%E6%95%B0/"/>
+    <id>http://yoursite.com/2019/02/24/Makefile之make命令参数/</id>
+    <published>2019-02-24T05:20:58.000Z</published>
+    <updated>2019-02-24T06:31:09.065Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="make命令参数介绍"><a href="#make命令参数介绍" class="headerlink" title="make命令参数介绍"></a>make命令参数介绍</h1><p>下面列举了所有GNU make 3.80版的参数定义。其它版本和产商的make大同小异，不过其它产商的make的具体参数还是请参考各自的产品文档。</p><ul><li>“-b” “-m”：这两个参数的作用是忽略和其他版本make的兼容性</li><li>“-B” “–always-make”：认为所有目标都需要更新(重编译)</li><li>“-C dir” “–directory=dir”:指定makefile的目录。如果有多个”-C”参数，那么后边的路径会以前面的作为相对路径。如:”make -C ~/C_Study/day03-makefile -C 03-make参数”,等价于”make -C ~/C_Study/day03-makefile/03-make参数”。</li><li>“–debug=options”：输出make的调试信息。有几个不同的选项参数可以选择，如果没有参数，就输出最简单的调试信息。下面是options的取值:<br>a—也就是all，输出所有调试信息<br>b—也就是basic，只输出简单的调试信息。即输出不需要重编译的目标<br>v—也就是verbose，在b选项的基础之上，输出的信息包含哪个makefile被解析，不需要被重编译的依赖文件(或是依赖目标)等<br>i—也就是implicit，输出所有隐含规则<br>j—也就是jobs，输出执行规则中命令的详细信息，如命令的PID，返回值等<br>m—也就是makefile，输出make读取makefile，更新makefile，执行makefile的信息</li><li>“-d”:相当于”–debug=a”</li><li>“-e” “–environment-overrides”:指明环境变量的值覆盖makefile中定义的变量的值</li><li>“-f=file” “–file=file” “–makefile=file”：指定需要执行的makefile</li><li>“-h” “–help”：显示帮助信息</li><li>“-i” “–ignore-errors”:在执行时忽略所有的错误</li><li>“-Idir” “–include-dir=dir”:指定make命令搜索路径。可以使用多个”-I”参数指定多个目标</li><li>“-j(jobnums)” “–jobs=jobnums”:指同时运行命令的个数，如果没有指定此参数，那么make命令能运行多少就运行多少，如果有一个以上的”-j”参数，那么仅有最后一个才是有效的（注意这个参数在MS-DOS中是无效的）</li><li>“-k” “–keep-going”：出了错了不会停止运行，如果生成一个目标失败了，那么依赖于其上的目标就不会被执行了</li><li>“-l(load)” “–load-average=load” “–max-load=load”:指定make运行命令的负载</li><li>“-n” “–just-print” “–dry-run” “–recon”:仅输出执行过程中的命令序列，但并不执行</li><li>“-o(file)” “–old-file=file” “–assume-old=file”:不重新生成指定的file，即使这个目标的依赖文件新于它。</li><li>“-p” “–print-data-base”:输出makefile中的所有数据，包括所有的规则和变量。这个参数会让一个简单的makefile都输出一堆信息。如果你只是想输出信息而不想执行 makefile，你可以使用“make -qp”命令。如果你想查看执行makefile前的预设变量和规则，你可以使用“make –p –f /dev/null”。这个参数输出的信息会包含着你的makefile文件的文件名和行号，所以，用这个参数来调试你的makefile会是很有用的，特别是当你的环境变量很复杂的时候。  </li><li>“q” “–question”:不运行命令，也不输出。仅仅检查所指定的目标是否需要更新，如果是0则说明需要更新，2说明有错误发生</li><li>“-r” “–no-builtin-rules”:禁止make使用任何隐含规则</li><li>“-R” “–no-builtin-varibles”：禁止make使用任何作用于变量上的隐含规则</li><li>“-s” “–slient” “–quiet”:在命令运行时不输出命令的输出</li><li>“-S” “–no-keep-going” “–stop”:取消“-k”选项的作用。因为有些时候，make的选项是从环境变量“MAKEFLAGS”中继承下来的。所以你可以在命令行中使用这个参数来让环境变量中的“-k”选项失效。</li><li>“-t” “–touch”:相当于UNIX的touch命令,只是把目标文件的修改日期变成最新的，也就是阻止生成目标的命令运行</li><li>“-v” “–version”：输出make程序的版本，版权等关于make的信息</li><li>“-w” “–print-directory”:输出运行makefile之前和之后的信息，这个参数对于跟踪嵌套式调用make时很有用。</li><li>“–no-print-directory”：禁止“-w”选项。</li><li>“-Wfile” “–what-if=file” “–new-file=file” “–assume-file=file”:假定目标file需要更新，如果和”-n”参数配合使用，会输出该目标更新时的运行动作，如果没有”-n”参数，这个命令和UNIX的touch命令一样，使得file修改时间为当前时间</li><li>“–warn-undefined-varibles”:只要make发现有未定义的变量，那么就输出警告信息</li></ul><h2 id="关于参数”-i”和”-k”的参数区别"><a href="#关于参数”-i”和”-k”的参数区别" class="headerlink" title="关于参数”-i”和”-k”的参数区别"></a>关于参数”-i”和”-k”的参数区别</h2><p>上面介绍了一大通的命令参数，也没写什么好的例子来做演示，是因为我个人感觉好多参数用的很少。不过学习过程中让我疑惑的就是这两个参数，表面上解释看起来完全一个样子，如果是完全一样为什么要定义两个参数呢，带着疑惑我查了下资料，总算是搞明白了。</p><ul><li>“-i”：这个参数是忽略运行过程中任何错误，并继续往下执行，也就是命令级别的忽略错误目标</li><li>“-k”：这个参数是当某个目标中出现错误，忽略此目标以及此目标依赖的生成规则，继续往上运行下一个目标<br>详细解释会比较麻烦，这里我把我查询的资料链接附上，有兴趣可以详细看<a href="https://blog.csdn.net/lfw19891101/article/details/6304296" target="_blank" rel="noopener">这里</a>。</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;make命令参数介绍&quot;&gt;&lt;a href=&quot;#make命令参数介绍&quot; class=&quot;headerlink&quot; title=&quot;make命令参数介绍&quot;&gt;&lt;/a&gt;make命令参数介绍&lt;/h1&gt;&lt;p&gt;下面列举了所有GNU make 3.80版的参数定义。其它版本和产商的mak
+      
+    
+    </summary>
+    
+    
+      <category term="Linux系统编程 Makefile" scheme="http://yoursite.com/tags/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B-Makefile/"/>
+    
+  </entry>
   
   <entry>
     <title>Makefile之Makefile运行</title>
@@ -460,29 +483,6 @@
     
     
       <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>网络传输大小端问题</title>
-    <link href="http://yoursite.com/2018/10/30/%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%A4%A7%E5%B0%8F%E7%AB%AF%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2018/10/30/网络传输大小端问题/</id>
-    <published>2018-10-30T13:14:05.000Z</published>
-    <updated>2018-11-01T15:12:59.804Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="网络传输大小端问题"><a href="#网络传输大小端问题" class="headerlink" title="网络传输大小端问题"></a>网络传输大小端问题</h1><p><strong>我们在边写linux网络编程的时候经常会使用htonl htons等函数用来对int类型 long类型的数据进行本地字节序和网络字节序的转换，而对于字符串类型的数据，就不需要转换呢？</strong></p><ul><li>网络上传输的数据都是字节流,对于一个多字节数值,在进行网络传输的时候,先传递哪个字节?其实是按照传输数据的内存地址由低到高来进行传输的。</li></ul><p><strong>在验证上面这一个问题之前，先来看一下大小端的问题</strong></p><ul><li>小端字节序是我们比较常见的字节序，个人使用的x86计算机大部分使用小端字节序，其实很好理解,小端法(Little-Endian)就是低位字节排放在内存的低地址端(即该值的起始地址),高位字节排放在内存的高地址端;</li><li>大端法(Big-Endian)就是高位字节排放在内存的低地址端(即该值的起始地址),低位字节排放在内存的高地址端</li><li>就比如 0x12345678 这个十六进制数字，低位在最右边(理解一下十进制中12345678，从右往左是不是个十百千…)，小端存储法就是0x78在低地址，0x12在高地址;大端0x78在高地址，0x12在低地址，可以用下面这一段代码看看自己是不是小端字节序.</li></ul><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="keyword">int</span> val = <span class="number">0x12345678</span>;</span><br><span class="line"><span class="keyword">char</span> *pVal = (<span class="keyword">char</span>*)&amp;val;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%x %x %x %x\n"</span>,*(pVal+<span class="number">0</span>),*(pVal+<span class="number">1</span>),*(pVal+<span class="number">2</span>),*(pVal+<span class="number">3</span>));</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li>输出结果是:78 56 34 12,证明了我使用的这台计算机是小端字节序</li></ul><p><strong>那么字符串在内存中存储形式是怎么样的呢？</strong></p><ul><li>比如”Hello”这个字符串，在内存中则是按照字符串本身从左往右顺序存储，’H’在前，’o’在后。这个则没必要写代码来验证了，太简单…</li></ul><p><strong>有了以上基础知识,那么便可以说明第一个问题了</strong></p><ul><li>网络上传输数据是按内存地址从低到高按顺序传输,那么传输”Hello”这个字符串的时候，就是按照”H” “e” “l” “l” “o”的顺序依次传输，对方接收的话，也是按照这个顺序把数据存入缓存区,字符串不涉及到大小端存储的规则，所以无需调用字节序转换函数来处理。</li><li>如果是 0x12345678 这个数据，那么则是按照0x78 0x56 0x34 0x12这个顺序按字节发送(16进制2位则是一个字节),对方机器如果收到后用int类型来解释这个数据，如果对方机器是小端字节序，那么没问题，收到的数据还是0x12345678，但是如果对方机器是大端字节序,用int来解释则会把高地址数据放在低位 低地址放在高位，变成了0x78563412,就会发生不想要的结果。</li></ul><p><strong>结论</strong></p><ul><li>所以在字节序相同的平台时间传输数据，进行转换字节序是没必要的，而在不同平台之间，则一定要进行转换</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;网络传输大小端问题&quot;&gt;&lt;a href=&quot;#网络传输大小端问题&quot; class=&quot;headerlink&quot; title=&quot;网络传输大小端问题&quot;&gt;&lt;/a&gt;网络传输大小端问题&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;我们在边写linux网络编程的时候经常会使用htonl htons等
-      
-    
-    </summary>
-    
-    
-      <category term="网络" scheme="http://yoursite.com/tags/%E7%BD%91%E7%BB%9C/"/>
     
   </entry>
   
